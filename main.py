@@ -47,15 +47,19 @@ _isLinux = sys.platform.startswith('linux')
 def load_env_variables():
     email = os.getenv("JIRA_EMAIL")
     if not email or email == "":
+        logger.exception("Email not found. Please set JIRA_EMAIL in your environment variables.")
         raise Exception("Email not found. Please set JIRA_EMAIL in your environment variables.")
     jira_api_token = os.getenv("JIRA_API_TOKEN")
     if not jira_api_token or jira_api_token == "":
+        logger.exception("JIRA API token not found. Please set JIRA_API_TOKEN in your environment variables.")
         raise Exception("JIRA API token not found. Please set JIRA_API_TOKEN in your environment variables.")
     tempo_api_token = os.getenv("TEMPO_API_TOKEN")
     if not tempo_api_token or tempo_api_token == "":
+        logger.exception("TEMPO token not found. Please set TEMPO_API_TOKEN in your environment variables.")
         raise Exception("TEMPO token not found. Please set TEMPO_API_TOKEN in your environment variables.")
     media_file_path = os.getenv("MEDIA_FILE_PATH")
     if not media_file_path or media_file_path == "":
+        logger.exception("MEDIA_FILE_PATH not found. Please set MEDIA_FILE_PATH in your environment variables.")
         raise Exception("MEDIA_FILE_PATH not found. Please set MEDIA_FILE_PATH in your environment variables.")
     return email, jira_api_token, tempo_api_token, media_file_path
 

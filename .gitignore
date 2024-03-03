@@ -1,2 +1,9 @@
+# Environment file
 .env
+
+#copyright issue
 /assets/annoying.mp4
+
+# build files
+/build
+/dist
