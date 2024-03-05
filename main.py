@@ -188,7 +188,7 @@ if __name__ == "__main__":
     email, jira_api_token, tempo_api_token, media_path = load_env_variables()
 
     while True:        
-        if lastDayBooked != datetime.today().day:
+        if lastDayBooked != datetime.today().day and datetime.now().hour >= 15:
             booked, message = is_user_booked_on_workday(email=email, jira_api_token=jira_api_token, tempo_api_token=tempo_api_token, check_date=datetime.today())
             logger.info(f"Booked: {booked}, Message: {message}")
             if not booked:
@@ -196,3 +196,4 @@ if __name__ == "__main__":
                 time.sleep(300)
             else:
                 lastDayBooked = datetime.today().day
+        time.sleep(60)
