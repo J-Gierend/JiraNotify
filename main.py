@@ -88,8 +88,10 @@ def is_user_booked_on_workday(email, jira_api_token, tempo_api_token, check_date
     
     if not isinstance(check_date, datetime):
         check_date = parse(check_date)
-    
+        logger.info(f"Check date: {check_date}")
+
     check_date_str = check_date.strftime('%Y-%m-%d')
+    logger.info(f"Check date str: {check_date_str}")
     
     if check_date.weekday() > 4:  # 0: Monday, 6: Sunday
         return True, "Selected day is not a workday."
@@ -98,17 +100,20 @@ def is_user_booked_on_workday(email, jira_api_token, tempo_api_token, check_date
     params = {
         "from": check_date_str,
         "to": check_date_str,
-        "worker": user_id
+        "accountId": user_id
     }
     
     response = requests.get(url, headers=headers, params=params)
     
     if response.status_code == 200:
         worklogs = response.json()
-        if worklogs['metadata']['count'] > 0:
-            return True, "User has booked hours on this workday."
-        else:
-            return False, "No hours booked on this workday."
+        logger.info(f"Worklogs: {worklogs}")
+        
+        for worklog in worklogs['results']:
+            if worklog['timeSpentSeconds'] > 0 and worklog['author']['accountId'] == user_id:
+                return True, "User has booked hours on this workday."
+            else:
+                return False, "No hours booked on this workday."
     else:
         return False, f"API Error: {response.status_code}"
 
